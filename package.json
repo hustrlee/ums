@@ -1,0 +1,15 @@
+{
+  "name": "ums",
+  "version": "1.0.0",
+  "description": "User Management System for Insurance App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com:hustrlee/ums.git"
+  },
+  "author": "Ryan Li <rlee@163.com>",
+  "license": "MIT"
+}
