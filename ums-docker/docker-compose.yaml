@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  openldap:
+    image: osixia/openldap:latest
+    container_name: openldap
+    environment:
+      - LDAP_ORGANISATION=User Managment System # 组织的名字
+      - LDAP_DOMAIN=ums # 公司域名，用于 BASE_DN，不可修改，否则数据库无法启动
+      - LDAP_ADMIN_PASSWORD=root # 管理员密码
+    volumes:
+      - ./data/slapd/database:/var/lib/ldap
+      - ./data/slapd/config:/etc/ldap/slapd.d
+    ports:
+      - 389:389
+
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    container_name: phpldapadmin
+    environment:
+      - PHPLDAPADMIN_HTTPS=false # 关闭HTTPS，开启HTTP。（HTTPS和HTTP只能开启一个）
+      - PHPLDAPADMIN_LDAP_HOSTS=openldap # 连接的OpenLDAP服务器
+    ports:
+      - 9002:80

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+DOCKER_COMPOSE_FILE="docker-compose.yaml"
+
+if [ -z "$1" ]
+then
+  echo -e "Usage: \n${0##*/} up \n${0##*/} down \n${0##*/} ps"
+  exit 1
+fi
+
+if [ $1 == up ]
+then
+  docker-compose -f $DOCKER_COMPOSE_FILE up -d
+elif [ $1 == down ]
+then
+  docker-compose -f $DOCKER_COMPOSE_FILE down -v
+elif [ $1 == ps ]
+then
+  docker-compose -f $DOCKER_COMPOSE_FILE ps
+else
+  echo -e "Usage: \n${0##*/} up \n${0##*/} down \n${0##*/} ps"
+  exit 1
+fi

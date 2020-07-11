@@ -1,0 +1,31 @@
+# 加载 memberof 模块
+dn: cn=module,cn=config
+cn: module
+objectclass: olcModuleList
+objectclass: top
+olcmoduleload: memberof
+olcmodulepath: /usr/lib/ldap
+
+# 将 memberof 添加到 mdb 的 overlay
+dn: olcOverlay={0}memberof,olcDatabase={1}mdb,cn=config
+objectClass: olcConfig
+objectClass: olcMemberOf
+objectClass: olcOverlayConfig
+objectClass: top
+olcOverlay: memberof
+
+# 加载 refint 模块
+dn: cn=module,cn=config
+cn: module
+objectclass: olcModuleList
+objectclass: top
+olcmoduleload: refint
+olcmodulepath: /usr/lib/ldap
+
+# 将 refint 添加到 mdb 的 overlay
+dn: olcOverlay={1}refint,olcDatabase={1}mdb,cn=config
+objectClass: olcConfig
+objectClass: olcMemberOf
+objectClass: olcOverlayConfig
+objectClass: top
+olcOverlay: refint

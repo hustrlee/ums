@@ -1,0 +1,52 @@
+# Entry 1: cn=定损员,ou=roles,dc=ums
+dn:: Y2495a6a5o2f5ZGYLG91PXJvbGVzLGRjPXVtcw==
+cn:: 5a6a5o2f5ZGY
+objectclass: groupOfUniqueNames
+objectclass: top
+uniquemember:: dWlkPXhpYXdlaSxvdT3lrprmjZ/kuK3lv4MsZGM9dW1z
+uniquemember:: dWlkPWd1b3Bpbmcsb3U95a6a5o2f5Lit5b+DLGRjPXVtcw==
+
+# Entry 2: cn=组长,ou=roles,dc=ums
+dn:: Y24957uE6ZW/LG91PXJvbGVzLGRjPXVtcw==
+cn:: 57uE6ZW/
+objectclass: groupOfUniqueNames
+objectclass: top
+uniquemember:: dWlkPXpoYW5neWFuZyxvdT3lrprmjZ/kuK3lv4MsZGM9dW1z
+uniquemember:: dWlkPWxpamllLG91PeWumuaNn+S4reW/gyxkYz11bXM=
+uniquemember:: dWlkPWZlbmdtaW5nLG91PeWumuaNn+S4reW/gyxkYz11bXM=
+uniquemember:: dWlkPXd1Y2hhbyxvdT3lrprmjZ/kuK3lv4MsZGM9dW1z
+
+# Entry 3: cn=主任,ou=roles,dc=ums
+dn:: Y2495Li75Lu7LG91PXJvbGVzLGRjPXVtcw==
+cn:: 5Li75Lu7
+objectclass: groupOfUniqueNames
+objectclass: top
+uniquemember:: dWlkPXl1eW9uZyxvdT3lrprmjZ/kuK3lv4MsZGM9dW1z
+
+# Entry 4: cn=包干修复初审,ou=roles,dc=ums
+dn:: Y2495YyF5bmy5L+u5aSN5Yid5a6hLG91PXJvbGVzLGRjPXVtcw==
+cn:: 5YyF5bmy5L+u5aSN5Yid5a6h
+objectclass: groupOfUniqueNames
+objectclass: top
+uniquemember:: dWlkPXpoYW5neWFuZyxvdT3lrprmjZ/kuK3lv4MsZGM9dW1z
+
+# Entry 1: cn=高价值件初审,ou=roles,dc=ums
+dn:: Y2496auY5Lu35YC85Lu25Yid5a6hLG91PXJvbGVzLGRjPXVtcw==
+cn:: 6auY5Lu35YC85Lu25Yid5a6h
+objectclass: groupOfUniqueNames
+objectclass: top
+uniquemember:: dWlkPWxpamllLG91PeWumuaNn+S4reW/gyxkYz11bXM=
+
+# Entry 1: cn=总成部件初审,ou=roles,dc=ums
+dn:: Y2495oC75oiQ6YOo5Lu25Yid5a6hLG91PXJvbGVzLGRjPXVtcw==
+cn:: 5oC75oiQ6YOo5Lu25Yid5a6h
+objectclass: groupOfUniqueNames
+objectclass: top
+uniquemember:: dWlkPWZlbmdtaW5nLG91PeWumuaNn+S4reW/gyxkYz11bXM=
+
+# Entry 1: cn=调价申请初审,ou=roles,dc=ums
+dn:: Y2496LCD5Lu355Sz6K+35Yid5a6hLG91PXJvbGVzLGRjPXVtcw==
+cn:: 6LCD5Lu355Sz6K+35Yid5a6h
+objectclass: groupOfUniqueNames
+objectclass: top
+uniquemember:: dWlkPXd1Y2hhbyxvdT3lrprmjZ/kuK3lv4MsZGM9dW1z

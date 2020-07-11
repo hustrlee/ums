@@ -1,0 +1,62 @@
+# Entry 1: uid=guoping,ou=定损中心,dc=ums
+dn:: dWlkPWd1b3Bpbmcsb3U95a6a5o2f5Lit5b+DLGRjPXVtcw==
+cn:: 5bmz
+objectclass: inetOrgPerson
+objectclass: top
+sn:: 6YOt
+uid: guoping
+userpassword: {MD5}ICy5YqxZB1uWSwcVLSNLcA==
+
+# Entry 2: uid=xiawei,ou=定损中心,dc=ums
+dn:: dWlkPXhpYXdlaSxvdT3lrprmjZ/kuK3lv4MsZGM9dW1z
+cn:: 5Lyf
+objectclass: inetOrgPerson
+objectclass: top
+sn:: 5aSP
+uid: xiawei
+userpassword: {MD5}ICy5YqxZB1uWSwcVLSNLcA==
+
+# Entry 3: uid=zhangyang,ou=定损中心,dc=ums
+dn:: dWlkPXpoYW5neWFuZyxvdT3lrprmjZ/kuK3lv4MsZGM9dW1z
+cn:: 5rSL
+objectclass: inetOrgPerson
+objectclass: top
+sn:: 5byg
+uid: zhangyang
+userpassword: {MD5}ICy5YqxZB1uWSwcVLSNLcA==
+
+# Entry 4: uid=lijie,ou=定损中心,dc=ums
+dn:: dWlkPWxpamllLG91PeWumuaNn+S4reW/gyxkYz11bXM=
+cn:: 5o23
+objectclass: inetOrgPerson
+objectclass: top
+sn:: 5p2O
+uid: lijie
+userpassword: {MD5}ICy5YqxZB1uWSwcVLSNLcA==
+
+# Entry 5: uid=fengming,ou=定损中心,dc=ums
+dn:: dWlkPWZlbmdtaW5nLG91PeWumuaNn+S4reW/gyxkYz11bXM=
+cn:: 5piO
+objectclass: inetOrgPerson
+objectclass: top
+sn:: 5Yav
+uid: fengming
+userpassword: {MD5}ICy5YqxZB1uWSwcVLSNLcA==
+
+# Entry 6: uid=wuchao,ou=定损中心,dc=ums
+dn:: dWlkPXd1Y2hhbyxvdT3lrprmjZ/kuK3lv4MsZGM9dW1z
+cn:: 6LaF
+objectclass: inetOrgPerson
+objectclass: top
+sn:: 5ZC0
+uid: wuchao
+userpassword: {MD5}ICy5YqxZB1uWSwcVLSNLcA==
+
+# Entry 7: uid=yuyong,ou=定损中心,dc=ums
+dn:: dWlkPXl1eW9uZyxvdT3lrprmjZ/kuK3lv4MsZGM9dW1z
+cn:: 5YuH
+objectclass: inetOrgPerson
+objectclass: top
+sn:: 5LqO
+uid: yuyong
+userpassword: {MD5}ICy5YqxZB1uWSwcVLSNLcA==

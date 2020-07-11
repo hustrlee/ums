@@ -1,0 +1,11 @@
+# Entry 1: ou=roles,dc=ums
+dn: ou=roles,dc=ums
+objectclass: organizationalUnit
+objectclass: top
+ou: roles
+
+# Entry 2: ou=定损中心,dc=ums
+dn:: b3U95a6a5o2f5Lit5b+DLGRjPXVtcw==
+objectclass: organizationalUnit
+objectclass: top
+ou:: 5a6a5o2f5Lit5b+D
