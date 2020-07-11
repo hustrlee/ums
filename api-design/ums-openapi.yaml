@@ -1,0 +1,134 @@
+openapi: 3.0.2
+
+info:
+  version: 0.5.0
+  title: 统一用户管理系统 API
+  description: 统一用户管理系统 API
+  contact:
+    name: Ryan Li
+    email: rlee@163.com
+
+servers:
+  - url: http://localhost:3002/ums
+
+paths:
+  /login:
+    post:
+      summary: 用户登录
+      operationId: login
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/schemas/LoginInfoDto"
+            example:
+              username: xiawei
+              password: "123"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResDto"
+              examples:
+                登录成功:
+                  value:
+                    code: 20000
+                    data:
+                      token: 1024bits-token
+                登录失败:
+                  value:
+                    code: 60204
+                    message: 不正确的用户名或密码
+
+  /userinfo:
+    get:
+      summary: 获取用户信息
+      description: >
+        通过 token 获取用户信息，必须先登录成功。
+      operationId: getInfo
+
+      parameters:
+        - in: query
+          name: token
+          description: 用户 token
+          required: true
+          schema:
+            type: string
+            example: "1024bits-token"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserInfoDto"
+              example:
+                code: 20000
+                data:
+                  id: xiawei
+                  name: 夏伟
+                  avatar: /avatars/xiawei.png
+                  roles: ["组长", "包干修复初审"]
+
+components:
+  schemas:
+    LoginInfoDto:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
+
+    LoginResDto:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: >
+            `20000`: 登录成功<br>
+            `60204`: 不正确的用户名或密码
+        data:
+          type: object
+          properties:
+            token:
+              type: string
+              description: 登录成功，返回 token
+        message:
+          type: string
+          description: 登录错误的原因
+
+    UserInfoDto:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: >
+            `20000`: 获取成功 <br>
+            `50008`: 无效的 token <br>
+            `50012`: 已在其它客户端登录 <br>
+            `50014`: 过期的 token
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+              description: 用户名
+            name:
+              type: string
+              description: 用户的真实姓名
+            avatar:
+              type: string
+              description: 用户头像的 url
+            roles:
+              type: array
+              items:
+                type: string
+                description: 用户所属的角色列表
