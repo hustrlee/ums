@@ -9,10 +9,12 @@ services:
       - LDAP_DOMAIN=ums # 公司域名，用于 BASE_DN，不可修改，否则数据库无法启动
       - LDAP_ADMIN_PASSWORD=root # 管理员密码
     volumes:
-      - ./data/slapd/database:/var/lib/ldap
-      - ./data/slapd/config:/etc/ldap/slapd.d
+      - ./ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom # 加载测试数据
+      - openldap-db:/var/lib/ldap
+      - openldap-config:/etc/ldap/slapd.d
     ports:
       - 389:389
+    command: --copy-service
 
   phpldapadmin:
     image: osixia/phpldapadmin:latest
@@ -20,5 +22,12 @@ services:
     environment:
       - PHPLDAPADMIN_HTTPS=false # 关闭HTTPS，开启HTTP。（HTTPS和HTTP只能开启一个）
       - PHPLDAPADMIN_LDAP_HOSTS=openldap # 连接的OpenLDAP服务器
+    volumes:
+      - phpldapadmin-root:/var/www/phpldapadmin
     ports:
       - 9002:80
+
+volumes:
+  openldap-db:
+  openldap-config:
+  phpldapadmin-root:
