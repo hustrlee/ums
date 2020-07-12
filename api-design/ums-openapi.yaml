@@ -7,6 +7,9 @@ info:
   contact:
     name: Ryan Li
     email: rlee@163.com
+  license:
+    name: MIT
+    url: https://mit-license.org/
 
 servers:
   - url: http://localhost:3002/ums
@@ -22,7 +25,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#components/schemas/LoginInfoDto"
+              $ref: "#/components/schemas/LoginInfoDto"
             example:
               username: xiawei
               password: "123"
@@ -38,13 +41,13 @@ paths:
                   value:
                     code: 20000
                     data:
-                      token: 1024bits-token
+                      token: JWT-token
                 登录失败:
                   value:
                     code: 60204
                     message: 不正确的用户名或密码
 
-  /userinfo:
+  /info:
     get:
       summary: 获取用户信息
       description: >
@@ -58,7 +61,7 @@ paths:
           required: true
           schema:
             type: string
-            example: "1024bits-token"
+            example: JWT-token
       responses:
         "200":
           description: OK
@@ -74,8 +77,44 @@ paths:
                   avatar: /avatars/xiawei.png
                   roles: ["组长", "包干修复初审"]
 
+  /logout:
+    post:
+      summary: 用户登出
+      operationId: logout
+
+      parameters:
+        - in: header
+          name: X-Token
+          description: 通过 `header` 中的 `X-Token` 来传递 token
+          required: true
+          schema:
+            type: string
+            example: JWT-token
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LogoutDto"
+              example:
+                code: 20000
+                data: "success"
+
 components:
   schemas:
+    ResponseCode:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: >
+            `20000`: 操作成功 <br>
+            `60204`: 不正确的用户名或密码 <br>
+            `50008`: 无效的 token <br>
+            `50012`: 已在其它客户端登录 <br>
+            `50014`: 过期的 token
+
     LoginInfoDto:
       type: object
       properties:
@@ -88,47 +127,47 @@ components:
         - password
 
     LoginResDto:
-      type: object
-      properties:
-        code:
-          type: integer
-          description: >
-            `20000`: 登录成功<br>
-            `60204`: 不正确的用户名或密码
-        data:
-          type: object
+      allOf:
+        - $ref: "#/components/schemas/ResponseCode"
+        - type: object
           properties:
-            token:
+            data:
+              type: object
+              properties:
+                token:
+                  type: string
+            message:
               type: string
-              description: 登录成功，返回 token
-        message:
-          type: string
-          description: 登录错误的原因
+              description: 登录错误的原因
 
     UserInfoDto:
-      type: object
-      properties:
-        code:
-          type: integer
-          description: >
-            `20000`: 获取成功 <br>
-            `50008`: 无效的 token <br>
-            `50012`: 已在其它客户端登录 <br>
-            `50014`: 过期的 token
-        data:
-          type: object
+      allOf:
+        - $ref: "#/components/schemas/ResponseCode"
+        - type: object
           properties:
-            id:
+            data:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: 用户名
+                name:
+                  type: string
+                  description: 用户的真实姓名
+                avatar:
+                  type: string
+                  description: 用户头像的 url
+                roles:
+                  type: array
+                  items:
+                    type: string
+                    description: 用户所属的角色列表
+
+    LogoutDto:
+      allOf:
+        - $ref: "#/components/schemas/ResponseCode"
+        - type: object
+          properties:
+            data:
               type: string
-              description: 用户名
-            name:
-              type: string
-              description: 用户的真实姓名
-            avatar:
-              type: string
-              description: 用户头像的 url
-            roles:
-              type: array
-              items:
-                type: string
-                description: 用户所属的角色列表
+              description: 总是 "success"

@@ -1,0 +1,170 @@
+openapi: 3.0.2
+info:
+  contact:
+    email: rlee@163.com
+    name: Ryan Li
+  description: 统一用户管理系统 API
+  title: 统一用户管理系统 API
+  version: 0.5.0
+servers:
+- url: http://localhost:3002/ums
+paths:
+  /login:
+    post:
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            example:
+              username: xiawei
+              password: "123"
+            schema:
+              $ref: '#/components/schemas/LoginInfoDto'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                登录成功:
+                  value:
+                    code: 20000
+                    data:
+                      token: JWT-token
+                登录失败:
+                  value:
+                    code: 60204
+                    message: 不正确的用户名或密码
+              schema:
+                $ref: '#/components/schemas/LoginResDto'
+          description: OK
+      summary: 用户登录
+      x-eov-operation-handler: controllers/DefaultController
+  /info:
+    get:
+      description: |
+        通过 token 获取用户信息，必须先登录成功。
+      operationId: getInfo
+      parameters:
+      - description: 用户 token
+        explode: true
+        in: query
+        name: token
+        required: true
+        schema:
+          example: JWT-token
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                code: 20000
+                data:
+                  id: xiawei
+                  name: 夏伟
+                  avatar: /avatars/xiawei.png
+                  roles:
+                  - 组长
+                  - 包干修复初审
+              schema:
+                $ref: '#/components/schemas/UserInfoDto'
+          description: OK
+      summary: 获取用户信息
+      x-eov-operation-handler: controllers/DefaultController
+  /logout:
+    post:
+      operationId: logout
+      parameters:
+      - description: 通过 `header` 中的 `X-Token` 来传递 token
+        explode: false
+        in: header
+        name: X-Token
+        required: true
+        schema:
+          example: JWT-token
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                code: 20000
+                data: success
+              schema:
+                $ref: '#/components/schemas/LogoutDto'
+          description: OK
+      summary: 用户登出
+      x-eov-operation-handler: controllers/DefaultController
+components:
+  schemas:
+    ResponseCode:
+      properties:
+        code:
+          description: |
+            `20000`: 操作成功 <br> `60204`: 不正确的用户名或密码 <br> `50008`: 无效的 token <br> `50012`: 已在其它客户端登录 <br> `50014`: 过期的 token
+          type: integer
+      type: object
+    LoginInfoDto:
+      example:
+        password: password
+        username: username
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+      - password
+      - username
+      type: object
+    LoginResDto:
+      allOf:
+      - $ref: '#/components/schemas/ResponseCode'
+      - $ref: '#/components/schemas/LoginResDto_allOf'
+    UserInfoDto:
+      allOf:
+      - $ref: '#/components/schemas/ResponseCode'
+      - $ref: '#/components/schemas/UserInfoDto_allOf'
+    LogoutDto:
+      allOf:
+      - $ref: '#/components/schemas/ResponseCode'
+      - $ref: '#/components/schemas/LogoutDto_allOf'
+    LoginResDto_allOf_data:
+      properties:
+        token:
+          type: string
+    LoginResDto_allOf:
+      properties:
+        data:
+          $ref: '#/components/schemas/LoginResDto_allOf_data'
+        message:
+          description: 登录错误的原因
+          type: string
+    UserInfoDto_allOf_data:
+      properties:
+        id:
+          description: 用户名
+          type: string
+        name:
+          description: 用户的真实姓名
+          type: string
+        avatar:
+          description: 用户头像的 url
+          type: string
+        roles:
+          items:
+            description: 用户所属的角色列表
+            type: string
+          type: array
+    UserInfoDto_allOf:
+      properties:
+        data:
+          $ref: '#/components/schemas/UserInfoDto_allOf_data'
+    LogoutDto_allOf:
+      properties:
+        data:
+          description: 总是 "success"
+          type: string

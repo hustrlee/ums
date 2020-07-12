@@ -1,0 +1,16 @@
+#!/bin/bash
+API_FILE="ums-openapi.yaml"
+
+buildServer() {
+    rm -rf server
+    docker run --rm -v $PWD:/local -u $(id -u):$(id -g) \
+    openapitools/openapi-generator-cli generate \
+    --global-property apiTests=false \
+    --global-property modelTests=false \
+    -i /local/${API_FILE} \
+    -o /local/server \
+    -g nodejs-express-server \
+    --additional-properties serverPort=3002
+}
+
+buildServer
