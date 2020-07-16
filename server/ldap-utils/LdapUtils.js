@@ -28,6 +28,10 @@ const validate = (username, password) => {
           console.log("entry: " + JSON.stringify(entry.object));
         });
 
+        res.on("searchReference", function (referral) {
+          console.log("referral: " + referral.uris.join());
+        });
+
         res.on("end", result => {
           client.unbind();
         });
