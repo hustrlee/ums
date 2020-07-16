@@ -6,8 +6,8 @@
  * parameters are extracted and sent to the service, and where response is handled.
  */
 
-const Controller = require('./Controller');
-const service = require('../services/DefaultService');
+const Controller = require("./Controller");
+const service = require("../services/DefaultService");
 const getInfo = async (request, response) => {
   await Controller.handleRequest(request, response, service.getInfo);
 };
@@ -20,9 +20,8 @@ const logout = async (request, response) => {
   await Controller.handleRequest(request, response, service.logout);
 };
 
-
 module.exports = {
   getInfo,
   login,
-  logout,
+  logout
 };

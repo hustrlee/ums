@@ -4,6 +4,9 @@ info:
     email: rlee@163.com
     name: Ryan Li
   description: 统一用户管理系统 API
+  license:
+    name: MIT
+    url: https://mit-license.org/
   title: 统一用户管理系统 API
   version: 0.5.0
 servers:
@@ -30,7 +33,7 @@ paths:
                   value:
                     code: 20000
                     data:
-                      token: JWT-token
+                      token: user-define-token
                 登录失败:
                   value:
                     code: 60204
@@ -52,7 +55,7 @@ paths:
         name: token
         required: true
         schema:
-          example: JWT-token
+          example: user-define-token
           type: string
         style: form
       responses:
@@ -83,7 +86,7 @@ paths:
         name: X-Token
         required: true
         schema:
-          example: JWT-token
+          example: user-define-token
           type: string
         style: simple
       responses:
@@ -152,7 +155,7 @@ components:
           description: 用户的真实姓名
           type: string
         avatar:
-          description: 用户头像的 url
+          description: 用户头像的 url 或 Base64 编码图像
           type: string
         roles:
           items:

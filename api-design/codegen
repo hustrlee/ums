@@ -10,7 +10,15 @@ buildServer() {
     -i /local/${API_FILE} \
     -o /local/server \
     -g nodejs-express-server \
-    --additional-properties serverPort=3002
 }
 
-buildServer
+# buildServer
+rm -rf server
+export JS_POST_PROCESS_FILE="/usr/local/bin/prettier --write"
+openapi-generator generate \
+    --global-property apiTests=false \
+    --global-property modelTests=false \
+    -i ${API_FILE} \
+    -o server \
+    -g nodejs-express-server \
+    --enable-post-process-file

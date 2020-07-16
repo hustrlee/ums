@@ -22,8 +22,6 @@ services:
     environment:
       - PHPLDAPADMIN_HTTPS=false # 关闭HTTPS，开启HTTP。（HTTPS和HTTP只能开启一个）
       - PHPLDAPADMIN_LDAP_HOSTS=openldap # 连接的OpenLDAP服务器
-    volumes:
-      - phpldapadmin-root:/var/www/phpldapadmin
     ports:
       - 9002:80
 
@@ -44,4 +42,3 @@ services:
 volumes:
   openldap-db:
   openldap-config:
-  phpldapadmin-root:

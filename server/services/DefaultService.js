@@ -13,10 +13,13 @@ const getInfo = ({ token }) =>
     try {
       resolve(
         Service.successResponse({
-          id: "xiawei",
-          name: "夏伟",
-          avatar: "/avatars/xiawei.png",
-          roles: ["定损员"]
+          code: 20000,
+          data: {
+            id: "xiawei",
+            name: "夏伟",
+            avatar: "/avatars/xiawei.png",
+            roles: ["定损员"]
+          }
         })
       );
     } catch (e) {
@@ -35,6 +38,8 @@ const getInfo = ({ token }) =>
 const login = ({ loginInfoDto }) =>
   new Promise(async (resolve, reject) => {
     try {
+      // 通过 bind 来判定用户名/密码是否正确
+      ldapClient.bind();
       resolve(
         Service.successResponse({
           code: 20000,

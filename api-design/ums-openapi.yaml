@@ -41,7 +41,7 @@ paths:
                   value:
                     code: 20000
                     data:
-                      token: JWT-token
+                      token: user-define-token
                 登录失败:
                   value:
                     code: 60204
@@ -61,7 +61,7 @@ paths:
           required: true
           schema:
             type: string
-            example: JWT-token
+            example: user-define-token
       responses:
         "200":
           description: OK
@@ -89,7 +89,7 @@ paths:
           required: true
           schema:
             type: string
-            example: JWT-token
+            example: user-define-token
       responses:
         "200":
           description: OK
@@ -156,7 +156,7 @@ components:
                   description: 用户的真实姓名
                 avatar:
                   type: string
-                  description: 用户头像的 url
+                  description: 用户头像的 url 或 Base64 编码图像
                 roles:
                   type: array
                   items:
