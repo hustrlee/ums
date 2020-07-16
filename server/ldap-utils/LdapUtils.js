@@ -1,4 +1,5 @@
-const ldap = require("ldapjs");
+const crypto = require("crypto");
+const ldap = require("ldapjs-promise");
 const client = ldap.createClient({
   url: "ldap:///"
 });
@@ -7,38 +8,66 @@ const baseDn = "dc=ums";
 const adminDn = "cn=admin," + baseDn;
 const adminSecret = "root";
 
-const validate = (username, password) => {
-  // 通过 username 获取完整的 DN
-  client.bind(adminDn, adminSecret, err => {
-    if (err) {
-      // admin 无法登录。通常是服务器出错
-      return {
-        code: 500,
-        message: "LDAP 服务器故障。"
-      };
+// const validate = (username, password) => {
+//   return new Promise(async (resolve, reject) => {
+//     let res = {};
+
+//     try {
+//       // 通过 username 获取完整的 DN
+//       await client.bind(adminDn, adminSecret);
+//       const userEntry = await client.findUser(baseDn, `(uid=${username})`, {
+//         scope: "sub"
+//       });
+//       console.log("bind success.");
+//       // 校验密码
+//       const hash = crypto.createHash("md5");
+//       const passwordHash = hash.update(password).digest("base64");
+//       if (userEntry.userPassword === `{MD5}${passwordHash}`) {
+//         // 密码匹配
+//         res = { code: 200, message: "success" };
+//       } else {
+//         // 密码不匹配
+//         res = { code: 401, message: "failed" };
+//       }
+
+//       // await client.unbind();
+//       resolve(res);
+//     } catch (err) {
+//       res = { code: 500, message: err.lde_message };
+
+//       // await client.unbind();
+//       reject(res);
+//     } finally {
+//       await client.unbind();
+//     }
+//   });
+// };
+const validate = async (username, password) => {
+  let res = {};
+
+  try {
+    // 通过 username 获取完整的 DN
+    await client.bind(adminDn, adminSecret);
+    const userEntry = await client.findUser(baseDn, `(uid=${username})`, {
+      scope: "sub"
+    });
+    console.log("bind success.");
+    // 校验密码
+    const hash = crypto.createHash("md5");
+    const passwordHash = hash.update(password).digest("base64");
+    if (userEntry.userPassword === `{MD5}${passwordHash}`) {
+      // 密码匹配
+      res = { code: 200, message: "success" };
     } else {
-      // admin bind 成功，搜索 userDn
-      const opt = {
-        scope: "sub",
-        filter: `(uid=${username})`,
-        attributes: ["dn", "cn", "sn"]
-      };
-      client.search(baseDn, opt, (err, res) => {
-        res.on("searchEntry", function (entry) {
-          console.log("entry: " + JSON.stringify(entry.object));
-        });
-
-        res.on("searchReference", function (referral) {
-          console.log("referral: " + referral.uris.join());
-        });
-
-        res.on("end", result => {
-          client.unbind();
-        });
-      });
+      // 密码不匹配
+      res = { code: 401, message: "failed" };
     }
-  });
-  // 校验密码
+  } catch (err) {
+    res = { code: 500, message: err.lde_message };
+  } finally {
+    await client.unbind();
+    return res;
+  }
 };
 
 module.exports = {

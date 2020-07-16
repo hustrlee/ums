@@ -1,3 +1,6 @@
 const { validate } = require("./LdapUtils");
 
-validate("xiawei", "123");
+(async () => {
+  const res = await validate("xiawei", "123");
+  console.log(res);
+})();
