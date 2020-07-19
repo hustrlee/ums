@@ -10,7 +10,7 @@ info:
   title: 统一用户管理系统 API
   version: 0.5.0
 servers:
-- url: http://localhost:3002/ums
+  - url: http://localhost:3000/ums
 paths:
   /login:
     post:
@@ -22,7 +22,7 @@ paths:
               username: xiawei
               password: "123"
             schema:
-              $ref: '#/components/schemas/LoginInfoDto'
+              $ref: "#/components/schemas/LoginInfoDto"
         required: true
       responses:
         "200":
@@ -39,7 +39,7 @@ paths:
                     code: 60204
                     message: 不正确的用户名或密码
               schema:
-                $ref: '#/components/schemas/LoginResDto'
+                $ref: "#/components/schemas/LoginResDto"
           description: OK
       summary: 用户登录
       x-eov-operation-handler: controllers/DefaultController
@@ -49,15 +49,15 @@ paths:
         通过 token 获取用户信息，必须先登录成功。
       operationId: getInfo
       parameters:
-      - description: 用户 token
-        explode: true
-        in: query
-        name: token
-        required: true
-        schema:
-          example: user-define-token
-          type: string
-        style: form
+        - description: 用户 token
+          explode: true
+          in: query
+          name: token
+          required: true
+          schema:
+            example: user-define-token
+            type: string
+          style: form
       responses:
         "200":
           content:
@@ -65,14 +65,14 @@ paths:
               example:
                 code: 20000
                 data:
-                  id: xiawei
+                  username: xiawei
                   name: 夏伟
-                  avatar: /avatars/xiawei.png
                   roles:
-                  - 组长
-                  - 包干修复初审
+                    - 组长
+                    - 包干修复初审
+                  avatar: /avatars/xiawei.png
               schema:
-                $ref: '#/components/schemas/UserInfoDto'
+                $ref: "#/components/schemas/UserInfoDto"
           description: OK
       summary: 获取用户信息
       x-eov-operation-handler: controllers/DefaultController
@@ -80,15 +80,15 @@ paths:
     post:
       operationId: logout
       parameters:
-      - description: 通过 `header` 中的 `X-Token` 来传递 token
-        explode: false
-        in: header
-        name: X-Token
-        required: true
-        schema:
-          example: user-define-token
-          type: string
-        style: simple
+        - description: 通过 `header` 中的 `X-Token` 来传递 token
+          explode: false
+          in: header
+          name: X-Token
+          required: true
+          schema:
+            example: user-define-token
+            type: string
+          style: simple
       responses:
         "200":
           content:
@@ -97,7 +97,7 @@ paths:
                 code: 20000
                 data: success
               schema:
-                $ref: '#/components/schemas/LogoutDto'
+                $ref: "#/components/schemas/LogoutDto"
           description: OK
       summary: 用户登出
       x-eov-operation-handler: controllers/DefaultController
@@ -120,21 +120,21 @@ components:
         password:
           type: string
       required:
-      - password
-      - username
+        - password
+        - username
       type: object
     LoginResDto:
       allOf:
-      - $ref: '#/components/schemas/ResponseCode'
-      - $ref: '#/components/schemas/LoginResDto_allOf'
+        - $ref: "#/components/schemas/ResponseCode"
+        - $ref: "#/components/schemas/LoginResDto_allOf"
     UserInfoDto:
       allOf:
-      - $ref: '#/components/schemas/ResponseCode'
-      - $ref: '#/components/schemas/UserInfoDto_allOf'
+        - $ref: "#/components/schemas/ResponseCode"
+        - $ref: "#/components/schemas/UserInfoDto_allOf"
     LogoutDto:
       allOf:
-      - $ref: '#/components/schemas/ResponseCode'
-      - $ref: '#/components/schemas/LogoutDto_allOf'
+        - $ref: "#/components/schemas/ResponseCode"
+        - $ref: "#/components/schemas/LogoutDto_allOf"
     LoginResDto_allOf_data:
       properties:
         token:
@@ -142,30 +142,30 @@ components:
     LoginResDto_allOf:
       properties:
         data:
-          $ref: '#/components/schemas/LoginResDto_allOf_data'
+          $ref: "#/components/schemas/LoginResDto_allOf_data"
         message:
           description: 登录错误的原因
           type: string
     UserInfoDto_allOf_data:
       properties:
-        id:
+        username:
           description: 用户名
           type: string
         name:
           description: 用户的真实姓名
-          type: string
-        avatar:
-          description: 用户头像的 url 或 Base64 编码图像
           type: string
         roles:
           items:
             description: 用户所属的角色列表
             type: string
           type: array
+        avatar:
+          description: 用户头像的 url 或 Base64 编码图像
+          type: string
     UserInfoDto_allOf:
       properties:
         data:
-          $ref: '#/components/schemas/UserInfoDto_allOf_data'
+          $ref: "#/components/schemas/UserInfoDto_allOf_data"
     LogoutDto_allOf:
       properties:
         data:

@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 const Service = require("./Service");
+const LdapClient = require("../ldap-utils/LdapUtils");
+const ldapClient = new LdapClient();
 
 /**
  * 获取用户信息
@@ -11,21 +13,23 @@ const Service = require("./Service");
 const getInfo = ({ token }) =>
   new Promise(async (resolve, reject) => {
     try {
+      await ldapClient.bind();
+      const username = "xiawei";
+      const res = await ldapClient.getUserInfo(username);
       resolve(
         Service.successResponse({
           code: 20000,
-          data: {
-            id: "xiawei",
-            name: "夏伟",
-            avatar: "/avatars/xiawei.png",
-            roles: ["定损员"]
-          }
+          data: res
         })
       );
     } catch (e) {
       reject(
         Service.rejectResponse(e.message || "Invalid input", e.status || 405)
       );
+      // }
+    } finally {
+      // 最后必须执行 unbind() 来关闭 LDAP 连接
+      await ldapClient.unbind();
     }
   });
 
@@ -38,20 +42,42 @@ const getInfo = ({ token }) =>
 const login = ({ loginInfoDto }) =>
   new Promise(async (resolve, reject) => {
     try {
-      // 通过 bind 来判定用户名/密码是否正确
-      ldapClient.bind();
-      resolve(
-        Service.successResponse({
-          code: 20000,
-          data: {
-            token: loginInfoDto.username + "-token"
-          }
-        })
+      // 验证用户名和密码是否正确
+      await ldapClient.bind();
+      const res = await ldapClient.validate(
+        loginInfoDto.username,
+        loginInfoDto.password
       );
+      switch (res.code) {
+        case 200:
+          // 验证成功
+          resolve(
+            Service.successResponse({
+              code: 20000,
+              data: {
+                token: loginInfoDto.username + "-token"
+              }
+            })
+          );
+          break;
+        default:
+          // 验证失败
+          resolve(
+            Service.successResponse({
+              code: 60204,
+              message: res.message
+            })
+          );
+          break;
+      }
     } catch (e) {
       reject(
         Service.rejectResponse(e.message || "Invalid input", e.status || 405)
       );
+      // }
+    } finally {
+      // 最后必须执行 unbind() 来关闭 LDAP 连接
+      await ldapClient.unbind();
     }
   });
 

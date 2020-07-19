@@ -12,7 +12,7 @@ info:
     url: https://mit-license.org/
 
 servers:
-  - url: http://localhost:3002/ums
+  - url: http://localhost:3000/ums
 
 paths:
   /login:
@@ -72,10 +72,10 @@ paths:
               example:
                 code: 20000
                 data:
-                  id: xiawei
+                  username: xiawei
                   name: 夏伟
-                  avatar: /avatars/xiawei.png
                   roles: ["组长", "包干修复初审"]
+                  avatar: /avatars/xiawei.png
 
   /logout:
     post:
@@ -148,20 +148,20 @@ components:
             data:
               type: object
               properties:
-                id:
+                username:
                   type: string
                   description: 用户名
                 name:
                   type: string
                   description: 用户的真实姓名
-                avatar:
-                  type: string
-                  description: 用户头像的 url 或 Base64 编码图像
                 roles:
                   type: array
                   items:
                     type: string
                     description: 用户所属的角色列表
+                avatar:
+                  type: string
+                  description: 用户头像的 url 或 Base64 编码图像
 
     LogoutDto:
       allOf:

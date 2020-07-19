@@ -3,22 +3,25 @@ API_FILE="ums-openapi.yaml"
 
 buildServer() {
     rm -rf server
+    
     docker run --rm -v $PWD:/local -u $(id -u):$(id -g) \
     openapitools/openapi-generator-cli generate \
     --global-property apiTests=false \
     --global-property modelTests=false \
     -i /local/${API_FILE} \
     -o /local/server \
-    -g nodejs-express-server \
+    -g nodejs-express-server
+
+    prettier --write server
 }
 
-# buildServer
-rm -rf server
-export JS_POST_PROCESS_FILE="/usr/local/bin/prettier --write"
-openapi-generator generate \
-    --global-property apiTests=false \
-    --global-property modelTests=false \
-    -i ${API_FILE} \
-    -o server \
-    -g nodejs-express-server \
-    --enable-post-process-file
+buildServer
+# rm -rf server
+# export JS_POST_PROCESS_FILE="prettier --write"
+# openapi-generator generate \
+#     --global-property apiTests=false \
+#     --global-property modelTests=false \
+#     -i ${API_FILE} \
+#     -o server \
+#     -g nodejs-express-server \
+#     --enable-post-process-file

@@ -10,7 +10,7 @@ function handleError(err, request, response, next) {
   next(
     JSON.stringify({
       code,
-      error: err
+      error: err,
     })
   );
 }

@@ -9,10 +9,10 @@ const logger = createLogger({
     new transports.File({
       filename: "error.log",
       level: "error",
-      timestamp: true
+      timestamp: true,
     }),
-    new transports.File({ filename: "combined.log", timestamp: true })
-  ]
+    new transports.File({ filename: "combined.log", timestamp: true }),
+  ],
 });
 
 if (process.env.NODE_ENV !== "production") {

@@ -56,17 +56,17 @@ class ExpressServer {
     new OpenApiValidator({
       apiSpec: this.openApiPath,
       operationHandlers: path.join(__dirname),
-      fileUploader: { dest: config.FILE_UPLOAD_PATH }
+      fileUploader: { dest: config.FILE_UPLOAD_PATH },
     })
       .install(this.app)
-      .catch(e => console.log(e))
+      .catch((e) => console.log(e))
       .then(() => {
         // eslint-disable-next-line no-unused-vars
         this.app.use((err, req, res, next) => {
           // format errors
           res.status(err.status || 500).json({
             message: err.message || err,
-            errors: err.errors || ""
+            errors: err.errors || "",
           });
         });
 
