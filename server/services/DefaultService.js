@@ -19,7 +19,7 @@ const getInfo = ({ token }) =>
       resolve(
         Service.successResponse({
           code: 20000,
-          data: res
+          data: res,
         })
       );
     } catch (e) {
@@ -55,8 +55,8 @@ const login = ({ loginInfoDto }) =>
             Service.successResponse({
               code: 20000,
               data: {
-                token: loginInfoDto.username + "-token"
-              }
+                token: loginInfoDto.username + "-token",
+              },
             })
           );
           break;
@@ -65,7 +65,7 @@ const login = ({ loginInfoDto }) =>
           resolve(
             Service.successResponse({
               code: 60204,
-              message: res.message
+              message: res.message,
             })
           );
           break;
@@ -93,7 +93,7 @@ const logout = ({ xToken }) =>
       resolve(
         Service.successResponse({
           code: 20000,
-          data: "success"
+          data: "success",
         })
       );
     } catch (e) {
@@ -106,5 +106,5 @@ const logout = ({ xToken }) =>
 module.exports = {
   getInfo,
   login,
-  logout
+  logout,
 };

@@ -82,9 +82,9 @@ class UmsClient {
     let userInfo;
 
     return new Promise((resolve, reject) => {
-      response.on("searchEntry", entry => {
+      response.on("searchEntry", (entry) => {
         // 判断 jpegPhoto 的类型：PNG / JPEG
-        const getMimeType = fileBuffer => {
+        const getMimeType = (fileBuffer) => {
           if (!fileBuffer) {
             // 如果图像 Buffer 为空，则未能识别到该文件类型
             return "";
@@ -155,11 +155,11 @@ class UmsClient {
         };
       });
 
-      response.on("error", error => {
+      response.on("error", (error) => {
         return reject(error);
       });
 
-      response.on("end", result => {
+      response.on("end", (result) => {
         if (result.status !== 0) {
           return reject(result.status);
         }
