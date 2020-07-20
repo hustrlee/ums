@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const Service = require("./Service");
-const LdapClient = require("../ldap-utils/LdapUtils");
+const ldapClient = require("../ldap-utils/LdapUtils");
 
 /**
  * 获取用户信息
@@ -11,30 +11,14 @@ const LdapClient = require("../ldap-utils/LdapUtils");
  * */
 const getInfo = ({ token }) =>
   new Promise(async (resolve, reject) => {
-    // try {
-    //   await ldapClient.bind();
-    // } catch (err) {
-    //   console.log(err);
-    //   reject(Service.rejectResponse("LDAP 服务器错误。", 405));
-    // }
-    // try {
-    //   const username = "xiawei";
-    //   const res = await ldapClient.getUserInfo(username);
-    //   resolve(
-    //     Service.successResponse({
-    //       code: 20000,
-    //       data: res
-    //     })
-    //   );
-    // } catch (e) {
-    //   reject(
-    //     Service.rejectResponse(e.message || "Invalid input", e.status || 405)
-    //   );
-    //   // }
-    // } finally {
-    //   // 最后必须执行 unbind() 来关闭 LDAP 连接
-    //   await ldapClient.unbind();
-    // }
+    try {
+      const res = await ldapClient.getUserInfo(token);
+      resolve(Service.successResponse(res));
+    } catch (e) {
+      reject(
+        Service.rejectResponse(e.message || "Invalid input", e.status || 405)
+      );
+    }
   });
 
 /**
@@ -45,16 +29,13 @@ const getInfo = ({ token }) =>
  * */
 const login = ({ loginInfoDto }) =>
   new Promise(async (resolve, reject) => {
-    const ldapClient = new LdapClient();
     try {
-      // 验证用户名和密码是否正确
-      await ldapClient.bind();
-      const res = await ldapClient.validate(
+      const res = await ldapClient.authenticate(
         loginInfoDto.username,
         loginInfoDto.password
       );
       switch (res.code) {
-        case 200:
+        case 20000:
           // 验证成功
           resolve(
             Service.successResponse({
@@ -79,7 +60,6 @@ const login = ({ loginInfoDto }) =>
       reject(
         Service.rejectResponse(e.message || "Invalid input", e.status || 405)
       );
-      // }
     }
   });
 

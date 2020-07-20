@@ -1,14 +1,12 @@
-const LdapClient = require("./LdapUtils");
-const ldapClient = new LdapClient();
+const client = require("./LdapUtils");
 
 (async () => {
-  try {
-    await ldapClient.bind();
-    // const res = await umsClient.validate("xiawei", "123");
-    const res = await ldapClient.getUserInfo("guoping");
+  let i;
+  // 压力测试
+  for (i = 0; i < 1; i++) {
+    res = await client.authenticate("xiawei", "123");
     console.log(res);
-    await ldapClient.unbind();
-  } catch (err) {
-    console.log(err.lde_message);
+    res = await client.getUserInfo("xiawei1");
+    console.log(res);
   }
 })();
