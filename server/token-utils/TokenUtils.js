@@ -4,6 +4,32 @@ const Redis = require("ioredis");
 const { v1: uuidv1 } = require("uuid");
 
 /**
+ * 生成并保存 Token
+ *
+ * @description 不允许多终端登录；Token Expire Time：1 天。
+ * @param {string} username - 用户名
+ * @returns {Promise.<string>} - 返回生成的 Token
+ */
+const setToken = username => {
+  return new Promise(resolve => {
+    // 通过 uuidv1 来生成 Token
+    const token = uuidv1();
+
+    // 保存 username : token，同时保存 token : username
+    const redis = new Redis();
+    redis
+      .multi()
+      .hset("username:token", username, token)
+      .hset("token:username", token, username)
+      .exec()
+      .then(res => {
+        resolve(token);
+        redis.quit();
+      });
+  });
+};
+
+/**
  * 通过 Token 获取用户名
  *
  * @param {string} token - 用户 Token
@@ -61,34 +87,6 @@ const delByToken = token => {
           redis.quit();
         });
     });
-  });
-};
-
-/**
- * 生成并保存 Token
- *
- * @description 每个用户只保留一个 Token，不允许多终端登录
- * @param {string} username - 用户名
- * @returns {Promise.<string>} - 返回生成的 Token
- */
-const setToken = username => {
-  return new Promise(resolve => {
-    // 通过 uuidv1 来生成 Token
-    const token = uuidv1();
-
-    // 保存 username : token，同时保存 token : username
-    // 保存前确保旧的 Token 已经被删除
-    const redis = new Redis();
-    redis
-      .multi()
-      .hdel("token:username", oldToken)
-      .hset("username:token", username, token)
-      .hset("token:username", token, username)
-      .exec()
-      .then(res => {
-        resolve(token);
-        redis.quit();
-      });
   });
 };
 
