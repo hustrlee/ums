@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 const Service = require("./Service");
 const ldapClient = require("../ldap-utils/LdapUtils");
+const tokenClient = require("../token-utils/TokenUtils");
 
 /**
  * 获取用户信息
@@ -30,10 +31,13 @@ const getInfo = ({ token }) =>
 const login = ({ loginInfoDto }) =>
   new Promise(async (resolve, reject) => {
     try {
+      // 校验用户名/密码
       const res = await ldapClient.authenticate(
         loginInfoDto.username,
         loginInfoDto.password
       );
+      // 生成/保存 token
+
       switch (res.code) {
         case 20000:
           // 验证成功
