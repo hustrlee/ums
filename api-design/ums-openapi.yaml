@@ -84,8 +84,9 @@ paths:
 
       parameters:
         - in: header
-          name: X-Token
-          description: 通过 `header` 中的 `X-Token` 来传递 token
+          name: x-token # 生成代码全部为小写
+          description: >
+            通过 `header` 中的 `X-Token` 来传递 token
           required: true
           schema:
             type: string

@@ -23,5 +23,5 @@ const logout = async (request, response) => {
 module.exports = {
   getInfo,
   login,
-  logout,
+  logout
 };

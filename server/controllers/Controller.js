@@ -45,7 +45,7 @@ class Controller {
     let uploadedFileName = "";
     if (request.files && request.files.length > 0) {
       const fileObject = request.files.find(
-        (file) => file.fieldname === fieldName
+        file => file.fieldname === fieldName
       );
       if (fileObject) {
         const fileArray = fileObject.originalname.split(".");
@@ -85,7 +85,7 @@ class Controller {
         requestParams[requestBodyName] = request.body;
       } else if (content["multipart/form-data"] !== undefined) {
         Object.keys(content["multipart/form-data"].schema.properties).forEach(
-          (property) => {
+          property => {
             const propertyObject =
               content["multipart/form-data"].schema.properties[property];
             if (
@@ -101,7 +101,7 @@ class Controller {
       }
     }
 
-    request.openapi.schema.parameters.forEach((param) => {
+    request.openapi.schema.parameters.forEach(param => {
       if (param.in === "path") {
         requestParams[param.name] = request.openapi.pathParams[param.name];
       } else if (param.in === "query") {

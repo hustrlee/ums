@@ -157,7 +157,7 @@ const getUserInfo = username => {
       )
       .then(
         res => {
-          let userInfo = {};
+          let userInfo;
 
           res.on("searchEntry", entry => {
             // 将 jpegPhoto 转换为 base64 图像数据，并赋值给 avatar

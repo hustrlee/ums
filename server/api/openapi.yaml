@@ -80,10 +80,11 @@ paths:
     post:
       operationId: logout
       parameters:
-        - description: 通过 `header` 中的 `X-Token` 来传递 token
+        - description: |
+            通过 `header` 中的 `X-Token` 来传递 token
           explode: false
           in: header
-          name: X-Token
+          name: x-token
           required: true
           schema:
             example: user-define-token

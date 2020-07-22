@@ -13,8 +13,9 @@ const tokenClient = require("../token-utils/TokenUtils");
 const getInfo = ({ token }) =>
   new Promise(async (resolve, reject) => {
     try {
-      const res = await ldapClient.getUserInfo(token);
-      resolve(Service.successResponse(res));
+      const username = await tokenClient.getUsername(token);
+      const userInfo = await ldapClient.getUserInfo(username);
+      resolve(Service.successResponse(userInfo));
     } catch (e) {
       reject(
         Service.rejectResponse(e.message || "Invalid input", e.status || 405)
@@ -36,17 +37,14 @@ const login = ({ loginInfoDto }) =>
         loginInfoDto.username,
         loginInfoDto.password
       );
-      // 生成/保存 token
-
       switch (res.code) {
         case 20000:
-          // 验证成功
+          // 验证成功，生成/保存 token
+          const token = await tokenClient.setToken(loginInfoDto.username);
           resolve(
             Service.successResponse({
               code: 20000,
-              data: {
-                token: loginInfoDto.username + "-token"
-              }
+              data: { token }
             })
           );
           break;
@@ -73,9 +71,11 @@ const login = ({ loginInfoDto }) =>
  * xToken String 通过 `header` 中的 `X-Token` 来传递 token
  * returns LogoutDto
  * */
-const logout = ({ xToken }) =>
+const logout = ({ ...xToken }) =>
   new Promise(async (resolve, reject) => {
     try {
+      // 删除 Token
+      await tokenClient.delToken(xToken["x-token"]);
       resolve(
         Service.successResponse({
           code: 20000,

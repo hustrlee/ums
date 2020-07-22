@@ -1,16 +1,16 @@
 #!/bin/bash
-API_FILE="ums-openapi.yaml"
+API_FILE="$PWD/ums-openapi.yaml"
 OUTPUT_DIR="$(dirname $PWD)/server"
 
 buildServer() {
     
     docker run --rm -u $(id -u):$(id -g) \
      -v $OUTPUT_DIR:/output \
-     -v $PWD:/input \
+     -v $API_FILE:/openapi.yaml \
     openapitools/openapi-generator-cli generate \
     --global-property apiTests=false \
     --global-property modelTests=false \
-    -i /input/${API_FILE} \
+    -i /openapi.yaml \
     -o /output \
     -g nodejs-express-server
 
