@@ -8,9 +8,18 @@ info:
     name: MIT
     url: https://mit-license.org/
   title: 统一用户管理系统 API
-  version: 0.5.0
+  version: 0.9.0
 servers:
   - url: http://localhost:3000/ums
+  - url: http://localhost:9002/ums
+  - url: http://{host}:{port}/{contextPath}
+    variables:
+      host:
+        default: localhost
+      port:
+        default: "3000"
+      contextPath:
+        default: ums
 paths:
   /login:
     post:
