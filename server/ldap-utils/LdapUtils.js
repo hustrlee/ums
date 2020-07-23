@@ -4,7 +4,7 @@ const ldap = require("ldapjs-promise");
 const parseDn = require("ldapjs-promise").parseDN;
 
 const ldapClientOpt = {
-  url: "ldap:///"
+  url: `ldap://${process.env.LDAP_HOST || "/"}`
 };
 const baseDn = "dc=ums";
 const adminDn = `cn=admin,${baseDn}`;

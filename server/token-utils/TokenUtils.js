@@ -17,7 +17,9 @@ const setToken = username => {
     const token = uuidv1();
 
     // 保存 token:username，同时保存 username_token(hash)，并设置有效期
-    const redis = new Redis();
+    const redis = new Redis({
+      host: `${process.env.REDIS_HOST || "localhost"}`
+    });
     redis
       .multi()
       .set(token, username)
