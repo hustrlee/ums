@@ -2,6 +2,7 @@
 
 const Redis = require("ioredis");
 const { v1: uuidv1 } = require("uuid");
+const redisHost = `${process.env.REDIS_HOST || "localhost"}`;
 const expireTime = 86400; // 86400s，一天
 
 /**
@@ -17,9 +18,7 @@ const setToken = username => {
     const token = uuidv1();
 
     // 保存 token:username，同时保存 username_token(hash)，并设置有效期
-    const redis = new Redis({
-      host: `${process.env.REDIS_HOST || "localhost"}`
-    });
+    const redis = new Redis({ host: redisHost });
     redis
       .multi()
       .set(token, username)
@@ -41,7 +40,7 @@ const setToken = username => {
  */
 const getUsername = token => {
   return new Promise(resolve => {
-    const redis = new Redis();
+    const redis = new Redis({ host: redisHost });
     redis.get(token).then(res => {
       resolve(res);
       redis.quit();
@@ -58,7 +57,7 @@ const getUsername = token => {
 const delToken = token => {
   return new Promise(resolve => {
     getUsername(token).then(username => {
-      const redis = new Redis();
+      const redis = new Redis({ host: redisHost });
       redis.del(token).then(res => {
         resolve("OK");
         redis.quit();
