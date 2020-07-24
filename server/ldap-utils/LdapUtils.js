@@ -185,7 +185,7 @@ const getUserInfo = username => {
             // 将姓和名拼接成完整的名字
             const name = entry.object.sn + entry.object.cn;
 
-            userInfo = { name, roles, avatar };
+            userInfo = { username, name, roles, avatar };
           });
 
           res.on("error", err => {
