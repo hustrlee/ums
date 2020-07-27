@@ -27,12 +27,21 @@ const getName = ({ username }) =>
   new Promise(async (resolve, reject) => {
     try {
       const userInfo = await ldapClient.getUserInfo(username);
-      resolve(
-        Service.successResponse({
-          code: 20000,
-          data: userInfo.data.name
-        })
-      );
+      if (userInfo.code === 20000) {
+        resolve(
+          Service.successResponse({
+            code: 20000,
+            data: userInfo.data.name
+          })
+        );
+      } else {
+        resolve(
+          Service.successResponse({
+            code: userInfo.code,
+            message: userInfo.message
+          })
+        );
+      }
     } catch (e) {
       reject(
         Service.rejectResponse(e.message || "Invalid input", e.status || 405)
