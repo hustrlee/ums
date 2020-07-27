@@ -23,6 +23,23 @@ const getInfo = ({ token }) =>
     }
   });
 
+const getName = ({ username }) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const userInfo = await ldapClient.getUserInfo(username);
+      resolve(
+        Service.successResponse({
+          code: 20000,
+          data: userInfo.data.name
+        })
+      );
+    } catch (e) {
+      reject(
+        Service.rejectResponse(e.message || "Invalid input", e.status || 405)
+      );
+    }
+  });
+
 /**
  * 用户登录
  *
@@ -91,6 +108,7 @@ const logout = ({ ...xToken }) =>
 
 module.exports = {
   getInfo,
+  getName,
   login,
   logout
 };

@@ -12,6 +12,10 @@ const getInfo = async (request, response) => {
   await Controller.handleRequest(request, response, service.getInfo);
 };
 
+const getName = async (request, response) => {
+  await Controller.handleRequest(request, response, service.getName);
+};
+
 const login = async (request, response) => {
   await Controller.handleRequest(request, response, service.login);
 };
@@ -22,6 +26,7 @@ const logout = async (request, response) => {
 
 module.exports = {
   getInfo,
+  getName,
   login,
   logout
 };

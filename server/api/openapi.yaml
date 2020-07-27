@@ -111,6 +111,33 @@ paths:
           description: OK
       summary: 用户登出
       x-eov-operation-handler: controllers/DefaultController
+  /name:
+    get:
+      description: |
+        通过用户名来查询用户的真实姓名，在报表中很有用。
+      operationId: getName
+      parameters:
+        - description: 用户名
+          explode: true
+          in: query
+          name: username
+          required: true
+          schema:
+            example: zhangsan
+            type: string
+          style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                code: 20000
+                data: 张三
+              schema:
+                $ref: "#/components/schemas/NameDto"
+          description: OK
+      summary: 获取用户的真实姓名
+      x-eov-operation-handler: controllers/DefaultController
 components:
   schemas:
     ResponseCode:
@@ -145,6 +172,10 @@ components:
       allOf:
         - $ref: "#/components/schemas/ResponseCode"
         - $ref: "#/components/schemas/LogoutDto_allOf"
+    NameDto:
+      allOf:
+        - $ref: "#/components/schemas/ResponseCode"
+        - $ref: "#/components/schemas/NameDto_allOf"
     LoginResDto_allOf_data:
       properties:
         token:
@@ -180,4 +211,9 @@ components:
       properties:
         data:
           description: 总是 "success"
+          type: string
+    NameDto_allOf:
+      properties:
+        data:
+          description: 用户的真实姓名
           type: string
