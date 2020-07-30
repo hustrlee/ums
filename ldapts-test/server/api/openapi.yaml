@@ -9,34 +9,30 @@ paths:
     post:
       operationId: login
       requestBody:
-        $ref: "#/components/requestBodies/inline_object"
         content:
           application/json:
+            example:
+              username: xiawei
+              password: "123"
             schema:
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
-              type: object
+              $ref: "#/components/schemas/LoginDto"
+        required: true
       responses:
         "200":
           content:
             application/json:
+              example: Success
               schema:
                 type: string
           description: OK
       summary: 用户登录
       x-eov-operation-handler: controllers/DefaultController
 components:
-  requestBodies:
-    inline_object:
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/inline_object"
   schemas:
-    inline_object:
+    LoginDto:
+      example:
+        password: password
+        username: username
       properties:
         username:
           type: string

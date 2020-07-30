@@ -1,30 +1,36 @@
 /* eslint-disable no-unused-vars */
 const Service = require("./Service");
-const { Client } = require("ldapts");
+// const ldap = require("ldapjs-promise");
+const { authenticate } = require("./LdapUtils");
 
 /**
  * 用户登录
  *
- * inlineObject InlineObject  (optional)
+ * loginDto LoginDto
  * returns String
  * */
-const client = new Client({
-  url: "ldap:///"
-});
+const login = async ({ loginDto }) => {
+  // const client = ldap.createClient({
+  //   url: "ldap:///"
+  // });
+  // const { username, password } = loginDto;
+  // let res = "Fail";
+  // try {
+  //   await client.bind("cn=admin,dc=ums", "root");
+  //   const entry = await client.findUser("dc=ums", `(uid=${username})`, {
+  //     scope: "sub"
+  //   });
+  //   await client.bind(entry.dn, password);
+  //   res = "Success";
+  //   await client.unbind();
+  // } catch (err) {
+  //   res = "Fail";
+  // }
+  // return new Promise(resolve => resolve(res));
 
-const login = ({ inlineObject }) =>
-  new Promise(async (resolve, reject) => {
-    try {
-      await client.bind("cn=admin,dc=ums", "root");
-      resolve(Service.successResponse("Success"));
-    } catch (e) {
-      reject(
-        Service.rejectResponse(e.message || "Invalid input", e.status || 405)
-      );
-    } finally {
-      // await client.unbind();
-    }
-  });
+  const res = await authenticate(loginDto);
+  return new Promise(resolve => resolve(Service.successResponse(res)));
+};
 
 module.exports = {
   login

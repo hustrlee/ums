@@ -14,15 +14,14 @@ paths:
       operationId: login
 
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
+              $ref: "#/components/schemas/LoginDto"
+            example:
+              username: xiawei
+              password: "123"
       responses:
         "200":
           description: OK
@@ -30,3 +29,14 @@ paths:
             application/json:
               schema:
                 type: string
+              example: "Success"
+
+components:
+  schemas:
+    LoginDto:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
