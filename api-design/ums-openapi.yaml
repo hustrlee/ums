@@ -111,31 +111,64 @@ paths:
                 code: 20000
                 data: "success"
 
-  /name:
+  # /name:
+  #   get:
+  #     summary: 获取用户的真实姓名
+  #     description: >
+  #       通过用户名来查询用户的真实姓名，在报表中很有用。
+  #     operationId: getName
+
+  #     parameters:
+  #       - in: query
+  #         name: username
+  #         description: 用户名
+  #         required: true
+  #         schema:
+  #           type: string
+  #           example: zhangsan
+  #     responses:
+  #       "200":
+  #         description: OK
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: "#/components/schemas/NameDto"
+  #             example:
+  #               code: 20000
+  #               data: 张三
+
+  /group:
     get:
-      summary: 获取用户的真实姓名
-      description: >
-        通过用户名来查询用户的真实姓名，在报表中很有用。
-      operationId: getName
+      summary: 获取用户组中的所有成员列表
+      description: 通过 role 来获取该角色的所有成员列表
+      operationId: getGroupMember
 
       parameters:
         - in: query
-          name: username
-          description: 用户名
+          name: role
+          description: 角色名称
           required: true
           schema:
             type: string
-            example: zhangsan
+            example: 组长
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/NameDto"
+                $ref: "#/components/schemas/GroupMemberDto"
               example:
                 code: 20000
-                data: 张三
+                data:
+                  role: 组长
+                  members:
+                    - username: fengming
+                      name: 冯明
+                    - username: zhangyang
+                      name: 张洋
+                    - username: lijie
+                      name: 李捷
 
 components:
   schemas:
@@ -208,11 +241,31 @@ components:
               type: string
               description: 总是 "success"
 
-    NameDto:
+    # NameDto:
+    #   allOf:
+    #     - $ref: "#/components/schemas/ResponseCode"
+    #     - type: object
+    #       properties:
+    #         data:
+    #           type: string
+    #           description: 用户的真实姓名
+
+    GroupMemberDto:
       allOf:
         - $ref: "#/components/schemas/ResponseCode"
         - type: object
           properties:
             data:
-              type: string
-              description: 用户的真实姓名
+              type: object
+              properties:
+                role:
+                  type: string
+                members:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                      name:
+                        type: string

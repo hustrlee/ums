@@ -10,6 +10,11 @@ const baseDn = "dc=ums";
 const adminDn = `cn=admin,${baseDn}`;
 const adminSecret = "root";
 
+const ldapClient = ldap.createClient(ldapClientOpt);
+// ldapClient.client.on("error", err => {
+//   console.log("LDAP Server 故障.");
+// });
+
 /**
  * @typedef AuthenticateResult
  * @property {number} code - 结果代码。20000：成功；60204：失败；70000：发生错误
@@ -24,10 +29,11 @@ const adminSecret = "root";
  */
 const authenticate = (username, password) => {
   return new Promise(resolve => {
-    const ldapClient = ldap.createClient(ldapClientOpt);
-    ldapClient.client.on("error", err => {
-      resolve({ code: 70000, message: "LDAP Server 故障." });
-    });
+    // const ldapClient = ldap.createClient(ldapClientOpt);
+
+    // ldapClient.client.on("error", err => {
+    //   resolve({ code: 70000, message: "LDAP Server 故障." });
+    // });
 
     ldapClient
       .bind(adminDn, adminSecret)
@@ -134,10 +140,11 @@ const getMimeType = buffer => {
  */
 const getUserInfo = username => {
   return new Promise(resolve => {
-    const ldapClient = ldap.createClient(ldapClientOpt);
-    ldapClient.client.on("error", err => {
-      resolve({ code: 70000, message: "LDAP Server 故障." });
-    });
+    // const ldapClient = ldap.createClient(ldapClientOpt);
+
+    // ldapClient.client.on("error", err => {
+    //   resolve({ code: 70000, message: "LDAP Server 故障." });
+    // });
 
     ldapClient
       .bind(adminDn, adminSecret)
@@ -175,11 +182,11 @@ const getUserInfo = username => {
             let memberOf = entry.object.memberOf;
             if (typeof memberOf === "string") {
               // 当用户只属于一个组的时候 memberOf 是一个字符串
-              // 为了后续处理的方便，将 memberOf 重新封装成数组
-              memberOf = [memberOf];
-            }
-            for (let item of memberOf) {
-              roles.push(parseDn(item).rdns[0].attrs.cn.value);
+              roles.push(parseDn(memberOf).rdns[0].attrs.cn.value);
+            } else {
+              for (let item of memberOf) {
+                roles.push(parseDn(item).rdns[0].attrs.cn.value);
+              }
             }
 
             // 将姓和名拼接成完整的名字
@@ -217,7 +224,66 @@ const getUserInfo = username => {
   });
 };
 
+const getRoleMember = role => {
+  return new Promise(resolve => {
+    // const ldapClient = ldap.createClient(ldapClientOpt);
+
+    // ldapClient.client.on("error", err => {
+    //   resolve({ code: 70000, message: "LDAP Server 故障." });
+    // });
+
+    ldapClient
+      .bind(adminDn, adminSecret)
+      .then(
+        res => {
+          return ldapClient.searchReturnAll(`ou=roles,${baseDn}`, {
+            filter: `cn=${role}`,
+            scope: "sub",
+            attributes: ["uniqueMember"]
+          });
+        },
+        err => {
+          // Admin 绑定失败
+          resolve({ code: 70000, message: "LDAP Server 授权失败." });
+        }
+      )
+      .then(
+        res => {
+          if (res.entries[0]) {
+            // 搜索成功，LDAP 的 groupOfUniqueNames 下至少有一个 uniqueMember
+            const members = [];
+            let uniqueMember = res.entries[0].uniqueMember;
+
+            if (typeof uniqueMember === "string") {
+              // 当只有一个用户的时候 uniqueMember 是一个字符串
+              members.push(parseDn(uniqueMember).rdns[0].attrs.uid.value);
+            } else {
+              for (let item of uniqueMember) {
+                members.push(parseDn(item).rdns[0].attrs.uid.value);
+              }
+            }
+
+            resolve({
+              code: 20000,
+              data: { role, members }
+            });
+          } else {
+            resolve({
+              code: 40001,
+              message: `“${role}”不存在.`
+            });
+          }
+        },
+        err => {
+          // 发生搜索错误
+          resolve({ code: 70000, message: "LDAP Server 搜索故障." });
+        }
+      );
+  });
+};
+
 module.exports = {
   authenticate,
-  getUserInfo
+  getUserInfo,
+  getRoleMember
 };

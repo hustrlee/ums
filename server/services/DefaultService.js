@@ -23,31 +23,31 @@ const getInfo = ({ token }) =>
     }
   });
 
-const getName = ({ username }) =>
-  new Promise(async (resolve, reject) => {
-    try {
-      const userInfo = await ldapClient.getUserInfo(username);
-      if (userInfo.code === 20000) {
-        resolve(
-          Service.successResponse({
-            code: 20000,
-            data: userInfo.data.name
-          })
-        );
-      } else {
-        resolve(
-          Service.successResponse({
-            code: userInfo.code,
-            message: userInfo.message
-          })
-        );
-      }
-    } catch (e) {
-      reject(
-        Service.rejectResponse(e.message || "Invalid input", e.status || 405)
-      );
-    }
-  });
+// const getName = ({ username }) =>
+//   new Promise(async (resolve, reject) => {
+//     try {
+//       const userInfo = await ldapClient.getUserInfo(username);
+//       if (userInfo.code === 20000) {
+//         resolve(
+//           Service.successResponse({
+//             code: 20000,
+//             data: userInfo.data.name
+//           })
+//         );
+//       } else {
+//         resolve(
+//           Service.successResponse({
+//             code: userInfo.code,
+//             message: userInfo.message
+//           })
+//         );
+//       }
+//     } catch (e) {
+//       reject(
+//         Service.rejectResponse(e.message || "Invalid input", e.status || 405)
+//       );
+//     }
+//   });
 
 /**
  * 用户登录
@@ -115,9 +115,12 @@ const logout = ({ ...xToken }) =>
     }
   });
 
+const getGroupMember = ({ role }) => {};
+
 module.exports = {
   getInfo,
-  getName,
+  // getName,
   login,
-  logout
+  logout,
+  getGroupMember
 };

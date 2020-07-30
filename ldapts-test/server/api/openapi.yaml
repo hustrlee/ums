@@ -1,0 +1,45 @@
+openapi: 3.0.2
+info:
+  title: LDAPjs 测试
+  version: 0.0.1
+servers:
+  - url: http://localhost:3000
+paths:
+  /login:
+    post:
+      operationId: login
+      requestBody:
+        $ref: "#/components/requestBodies/inline_object"
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              type: object
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: OK
+      summary: 用户登录
+      x-eov-operation-handler: controllers/DefaultController
+components:
+  requestBodies:
+    inline_object:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/inline_object"
+  schemas:
+    inline_object:
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      type: object

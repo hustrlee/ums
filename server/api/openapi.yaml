@@ -111,19 +111,18 @@ paths:
           description: OK
       summary: 用户登出
       x-eov-operation-handler: controllers/DefaultController
-  /name:
+  /group:
     get:
-      description: |
-        通过用户名来查询用户的真实姓名，在报表中很有用。
-      operationId: getName
+      description: 通过 role 来获取该角色的所有成员列表
+      operationId: getGroupMember
       parameters:
-        - description: 用户名
+        - description: 角色名称
           explode: true
           in: query
-          name: username
+          name: role
           required: true
           schema:
-            example: zhangsan
+            example: 组长
             type: string
           style: form
       responses:
@@ -132,11 +131,19 @@ paths:
             application/json:
               example:
                 code: 20000
-                data: 张三
+                data:
+                  role: 组长
+                  members:
+                    - username: fengming
+                      name: 冯明
+                    - username: zhangyang
+                      name: 张洋
+                    - username: lijie
+                      name: 李捷
               schema:
-                $ref: "#/components/schemas/NameDto"
+                $ref: "#/components/schemas/GroupMemberDto"
           description: OK
-      summary: 获取用户的真实姓名
+      summary: 获取用户组中的所有成员列表
       x-eov-operation-handler: controllers/DefaultController
 components:
   schemas:
@@ -172,10 +179,10 @@ components:
       allOf:
         - $ref: "#/components/schemas/ResponseCode"
         - $ref: "#/components/schemas/LogoutDto_allOf"
-    NameDto:
+    GroupMemberDto:
       allOf:
         - $ref: "#/components/schemas/ResponseCode"
-        - $ref: "#/components/schemas/NameDto_allOf"
+        - $ref: "#/components/schemas/GroupMemberDto_allOf"
     LoginResDto_allOf_data:
       properties:
         token:
@@ -212,8 +219,21 @@ components:
         data:
           description: 总是 "success"
           type: string
-    NameDto_allOf:
+    GroupMemberDto_allOf_data_members:
+      properties:
+        username:
+          type: string
+        name:
+          type: string
+    GroupMemberDto_allOf_data:
+      properties:
+        role:
+          type: string
+        members:
+          items:
+            $ref: "#/components/schemas/GroupMemberDto_allOf_data_members"
+          type: array
+    GroupMemberDto_allOf:
       properties:
         data:
-          description: 用户的真实姓名
-          type: string
+          $ref: "#/components/schemas/GroupMemberDto_allOf_data"

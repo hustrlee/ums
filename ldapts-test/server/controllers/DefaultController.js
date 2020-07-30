@@ -8,25 +8,10 @@
 
 const Controller = require("./Controller");
 const service = require("../services/DefaultService");
-const getGroupMember = async (request, response) => {
-  await Controller.handleRequest(request, response, service.getGroupMember);
-};
-
-const getInfo = async (request, response) => {
-  await Controller.handleRequest(request, response, service.getInfo);
-};
-
 const login = async (request, response) => {
   await Controller.handleRequest(request, response, service.login);
 };
 
-const logout = async (request, response) => {
-  await Controller.handleRequest(request, response, service.logout);
-};
-
 module.exports = {
-  getGroupMember,
-  getInfo,
   login,
-  logout
 };
