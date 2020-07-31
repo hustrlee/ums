@@ -11,7 +11,6 @@ info:
   version: 0.9.0
 servers:
   - url: http://localhost:3000/ums
-  - url: http://localhost:9002/ums
   - url: http://{host}:{port}/{contextPath}
     variables:
       host:
@@ -31,7 +30,7 @@ paths:
               username: xiawei
               password: "123"
             schema:
-              $ref: "#/components/schemas/LoginInfoDto"
+              $ref: "#/components/schemas/LoginDto"
         required: true
       responses:
         "200":
@@ -51,7 +50,9 @@ paths:
                 $ref: "#/components/schemas/LoginResDto"
           description: OK
       summary: 用户登录
-      x-eov-operation-handler: controllers/DefaultController
+      tags:
+        - User
+      x-eov-operation-handler: controllers/UserController
   /info:
     get:
       description: |
@@ -81,10 +82,12 @@ paths:
                     - 包干修复初审
                   avatar: /avatars/xiawei.png
               schema:
-                $ref: "#/components/schemas/UserInfoDto"
+                $ref: "#/components/schemas/InfoResDto"
           description: OK
       summary: 获取用户信息
-      x-eov-operation-handler: controllers/DefaultController
+      tags:
+        - User
+      x-eov-operation-handler: controllers/UserController
   /logout:
     post:
       operationId: logout
@@ -107,24 +110,26 @@ paths:
                 code: 20000
                 data: success
               schema:
-                $ref: "#/components/schemas/LogoutDto"
+                $ref: "#/components/schemas/LogoutResDto"
           description: OK
       summary: 用户登出
-      x-eov-operation-handler: controllers/DefaultController
-  /group:
+      tags:
+        - User
+      x-eov-operation-handler: controllers/UserController
+  /role/{role}:
     get:
       description: 通过 role 来获取该角色的所有成员列表
-      operationId: getGroupMember
+      operationId: getRoleMember
       parameters:
         - description: 角色名称
-          explode: true
-          in: query
+          explode: false
+          in: path
           name: role
           required: true
           schema:
             example: 组长
             type: string
-          style: form
+          style: simple
       responses:
         "200":
           content:
@@ -141,10 +146,12 @@ paths:
                     - username: lijie
                       name: 李捷
               schema:
-                $ref: "#/components/schemas/GroupMemberDto"
+                $ref: "#/components/schemas/RoleMemberResDto"
           description: OK
       summary: 获取用户组中的所有成员列表
-      x-eov-operation-handler: controllers/DefaultController
+      tags:
+        - User
+      x-eov-operation-handler: controllers/UserController
 components:
   schemas:
     ResponseCode:
@@ -154,7 +161,7 @@ components:
             `20000`: 操作成功 <br> `60204`: 不正确的用户名或密码 <br> `50008`: 无效的 token <br> `50012`: 已在其它客户端登录 <br> `50014`: 过期的 token
           type: integer
       type: object
-    LoginInfoDto:
+    LoginDto:
       example:
         password: password
         username: username
@@ -171,18 +178,18 @@ components:
       allOf:
         - $ref: "#/components/schemas/ResponseCode"
         - $ref: "#/components/schemas/LoginResDto_allOf"
-    UserInfoDto:
+    InfoResDto:
       allOf:
         - $ref: "#/components/schemas/ResponseCode"
-        - $ref: "#/components/schemas/UserInfoDto_allOf"
-    LogoutDto:
+        - $ref: "#/components/schemas/InfoResDto_allOf"
+    LogoutResDto:
       allOf:
         - $ref: "#/components/schemas/ResponseCode"
-        - $ref: "#/components/schemas/LogoutDto_allOf"
-    GroupMemberDto:
+        - $ref: "#/components/schemas/LogoutResDto_allOf"
+    RoleMemberResDto:
       allOf:
         - $ref: "#/components/schemas/ResponseCode"
-        - $ref: "#/components/schemas/GroupMemberDto_allOf"
+        - $ref: "#/components/schemas/RoleMemberResDto_allOf"
     LoginResDto_allOf_data:
       properties:
         token:
@@ -194,7 +201,7 @@ components:
         message:
           description: 登录错误的原因
           type: string
-    UserInfoDto_allOf_data:
+    InfoResDto_allOf_data:
       properties:
         username:
           description: 用户名
@@ -210,30 +217,30 @@ components:
         avatar:
           description: 用户头像的 url 或 Base64 编码图像
           type: string
-    UserInfoDto_allOf:
+    InfoResDto_allOf:
       properties:
         data:
-          $ref: "#/components/schemas/UserInfoDto_allOf_data"
-    LogoutDto_allOf:
+          $ref: "#/components/schemas/InfoResDto_allOf_data"
+    LogoutResDto_allOf:
       properties:
         data:
           description: 总是 "success"
           type: string
-    GroupMemberDto_allOf_data_members:
+    RoleMemberResDto_allOf_data_members:
       properties:
         username:
           type: string
         name:
           type: string
-    GroupMemberDto_allOf_data:
+    RoleMemberResDto_allOf_data:
       properties:
         role:
           type: string
         members:
           items:
-            $ref: "#/components/schemas/GroupMemberDto_allOf_data_members"
+            $ref: "#/components/schemas/RoleMemberResDto_allOf_data_members"
           type: array
-    GroupMemberDto_allOf:
+    RoleMemberResDto_allOf:
       properties:
         data:
-          $ref: "#/components/schemas/GroupMemberDto_allOf_data"
+          $ref: "#/components/schemas/RoleMemberResDto_allOf_data"

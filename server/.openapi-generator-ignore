@@ -22,5 +22,5 @@
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
 
-services/DefaultService.js
 package.json
+services/UserService.js

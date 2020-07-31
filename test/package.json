@@ -1,0 +1,12 @@
+{
+  "name": "ums-server-test",
+  "version": "1.0.0",
+  "description": "UMS Server 功能测试、压力测试",
+  "main": "index.js",
+  "author": "Ryan Li <rlee@163.com>",
+  "license": "MIC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "moment": "^2.27.0"
+  }
+}

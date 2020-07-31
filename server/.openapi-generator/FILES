@@ -3,7 +3,7 @@ README.md
 api/openapi.yaml
 config.js
 controllers/Controller.js
-controllers/DefaultController.js
+controllers/UserController.js
 controllers/index.js
 expressServer.js
 index.js

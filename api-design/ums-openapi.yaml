@@ -13,7 +13,6 @@ info:
 
 servers:
   - url: http://localhost:3000/ums
-  - url: http://localhost:9002/ums
   - url: "http://{host}:{port}/{contextPath}"
     variables:
       host:
@@ -28,13 +27,15 @@ paths:
     post:
       summary: 用户登录
       operationId: login
+      tags:
+        - User
 
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/LoginInfoDto"
+              $ref: "#/components/schemas/LoginDto"
             example:
               username: xiawei
               password: "123"
@@ -62,6 +63,8 @@ paths:
       description: >
         通过 token 获取用户信息，必须先登录成功。
       operationId: getInfo
+      tags:
+        - User
 
       parameters:
         - in: query
@@ -77,7 +80,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserInfoDto"
+                $ref: "#/components/schemas/InfoResDto"
               example:
                 code: 20000
                 data:
@@ -90,10 +93,12 @@ paths:
     post:
       summary: 用户登出
       operationId: logout
+      tags:
+        - User
 
       parameters:
         - in: header
-          name: x-token # 生成代码全部为小写
+          name: x-token
           description: >
             通过 `header` 中的 `X-Token` 来传递 token
           required: true
@@ -106,45 +111,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LogoutDto"
+                $ref: "#/components/schemas/LogoutResDto"
               example:
                 code: 20000
                 data: "success"
 
-  # /name:
-  #   get:
-  #     summary: 获取用户的真实姓名
-  #     description: >
-  #       通过用户名来查询用户的真实姓名，在报表中很有用。
-  #     operationId: getName
-
-  #     parameters:
-  #       - in: query
-  #         name: username
-  #         description: 用户名
-  #         required: true
-  #         schema:
-  #           type: string
-  #           example: zhangsan
-  #     responses:
-  #       "200":
-  #         description: OK
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: "#/components/schemas/NameDto"
-  #             example:
-  #               code: 20000
-  #               data: 张三
-
-  /group:
+  /role/{role}:
     get:
       summary: 获取用户组中的所有成员列表
       description: 通过 role 来获取该角色的所有成员列表
-      operationId: getGroupMember
+      operationId: getRoleMember
+      tags:
+        - User
 
       parameters:
-        - in: query
+        - in: path
           name: role
           description: 角色名称
           required: true
@@ -157,7 +138,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GroupMemberDto"
+                $ref: "#/components/schemas/RoleMemberResDto"
               example:
                 code: 20000
                 data:
@@ -184,7 +165,7 @@ components:
             `50012`: 已在其它客户端登录 <br>
             `50014`: 过期的 token
 
-    LoginInfoDto:
+    LoginDto:
       type: object
       properties:
         username:
@@ -209,7 +190,7 @@ components:
               type: string
               description: 登录错误的原因
 
-    UserInfoDto:
+    InfoResDto:
       allOf:
         - $ref: "#/components/schemas/ResponseCode"
         - type: object
@@ -232,7 +213,7 @@ components:
                   type: string
                   description: 用户头像的 url 或 Base64 编码图像
 
-    LogoutDto:
+    LogoutResDto:
       allOf:
         - $ref: "#/components/schemas/ResponseCode"
         - type: object
@@ -241,16 +222,7 @@ components:
               type: string
               description: 总是 "success"
 
-    # NameDto:
-    #   allOf:
-    #     - $ref: "#/components/schemas/ResponseCode"
-    #     - type: object
-    #       properties:
-    #         data:
-    #           type: string
-    #           description: 用户的真实姓名
-
-    GroupMemberDto:
+    RoleMemberResDto:
       allOf:
         - $ref: "#/components/schemas/ResponseCode"
         - type: object

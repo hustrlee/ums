@@ -1,7 +1,7 @@
 const axios = require("axios");
 const moment = require("moment");
 const client = axios.create({
-  baseURL: "http://localhost:3000/",
+  baseURL: "http://localhost:3000/ums",
   headers: { "Content-Type": "application/json" },
   timeout: 0
 });
@@ -16,7 +16,7 @@ const opt = {
 };
 
 const concurrent = [];
-for (let i = 0; i < 800; i++) {
+for (let i = 0; i < 500; i++) {
   concurrent.push((() => client.request(opt))());
 }
 

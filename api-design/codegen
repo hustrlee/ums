@@ -14,7 +14,7 @@ buildServer() {
     -o /output \
     -g nodejs-express-server
 
-    prettier --write $OUTPUT_DIR
+    prettier --trailing-comma none --arrow-parens avoid --write $OUTPUT_DIR
 }
 
 buildServer

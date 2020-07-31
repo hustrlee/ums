@@ -1,5 +1,5 @@
 /**
- * The DefaultController file is a very simple one, which does not need to be changed manually,
+ * The UserController file is a very simple one, which does not need to be changed manually,
  * unless there's a case where business logic reoutes the request to an entity which is not
  * the service.
  * The heavy lifting of the Controller item is done in Request.js - that is where request
@@ -7,13 +7,13 @@
  */
 
 const Controller = require("./Controller");
-const service = require("../services/DefaultService");
-const getGroupMember = async (request, response) => {
-  await Controller.handleRequest(request, response, service.getGroupMember);
-};
-
+const service = require("../services/UserService");
 const getInfo = async (request, response) => {
   await Controller.handleRequest(request, response, service.getInfo);
+};
+
+const getRoleMember = async (request, response) => {
+  await Controller.handleRequest(request, response, service.getRoleMember);
 };
 
 const login = async (request, response) => {
@@ -25,8 +25,8 @@ const logout = async (request, response) => {
 };
 
 module.exports = {
-  getGroupMember,
   getInfo,
+  getRoleMember,
   login,
   logout
 };
