@@ -172,7 +172,6 @@ const getRoleMember = async role => {
     scope: "sub",
     attributes: ["uniqueMember"]
   });
-  await ldapClient.unbind();
 
   if (res.entries[0]) {
     // 搜索成功，LDAP 的 groupOfUniqueNames 下至少有一个 uniqueMember
@@ -181,15 +180,31 @@ const getRoleMember = async role => {
     const members = [];
     if (typeof uniqueMember === "string") {
       // 当只有一个用户的时候 uniqueMember 是一个字符串
-      members.push(parseDn(uniqueMember).rdns[0].attrs.uid.value);
+      const username = parseDn(uniqueMember).rdns[0].attrs.uid.value;
+      const name = await ldapClient.findUser(
+        baseDn,
+        `(entryDN=${uniqueMember})`,
+        {
+          scope: "sub",
+          attributes: ["cn", "sn"]
+        }
+      );
+      members.push({ username, name: name.sn + name.cn });
     } else {
       for (let item of uniqueMember) {
-        members.push(parseDn(item).rdns[0].attrs.uid.value);
+        const username = parseDn(item).rdns[0].attrs.uid.value;
+        const name = await ldapClient.findUser(baseDn, `(entryDN=${item})`, {
+          scope: "sub",
+          attributes: ["cn", "sn"]
+        });
+        members.push({ username, name: name.sn + name.cn });
       }
     }
 
+    await ldapClient.unbind();
     return { code: 20000, data: { role, members } };
   } else {
+    await ldapClient.unbind();
     return { code: 40001, message: `“${role}”不存在.` };
   }
 };
